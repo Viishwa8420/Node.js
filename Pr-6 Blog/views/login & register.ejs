@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            background-color: #EEF1F8;
+        }
+
+        .hero {
+            height: 100vh;
+            width: 100%;
+            background: linear-gradient(rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url('https://i.postimg.cc/C5dVWngw/banner.jpg');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Remove absolute positioning from input-group */
+.input-group {
+    width: 85%;
+    align-items: center;
+    padding: 30px;
+    display: none; /* Use this for toggling visibility */
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Default display for login form */
+#login {
+    display: flex;
+}
+
+/* Add active class for toggling */
+.input-group.active {
+    display: flex;
+}
+.form-box {
+    width: 400px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Positioning of button-box and toggle-btn */
+.button-box {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    width: 50%;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+#btn {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, #ff105f, #ffad06);
+    border-radius: 30px;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: left 0.5s ease; /* Smooth transition for the toggle button */
+}
+
+
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to right, #ff105f, #ffad06);
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .form-footer a {
+            color: #ff105f;
+            text-decoration: none;
+        } 
+       
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <div class="form-box">
+            <div class="button-box">
+                <div id="btn"></div>
+                <button class="toggle-btn" onclick="login()">Login</button>
+                <button class="toggle-btn" onclick="register()">Register</button>
+            </div>
+
+          <!-- Login Form -->
+<form id="login" class="input-group active" action="/loginuser" method="post">
+    <input type="email" class="input-field" placeholder="Email" name="email" required>
+    <input type="password" class="input-field" placeholder="Password" name="password" required>
+    <button type="submit" class="submit-btn">Login</button>
+    <div class="form-footer">
+        <span>Don't have an account? <a href="#" onclick="register()">Register</a></span>
+    </div>
+</form>
+
+<!-- Register Form -->
+<form id="register" class="input-group" action="/registeruser" method="post">
+    <input type="text" class="input-field" placeholder="Name" name="name" required>
+    <input type="email" class="input-field" placeholder="Email" name="email" required>
+    <input type="password" class="input-field" placeholder="Password" name="password" required>
+    <div>
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to the <a href="#">terms and conditions</a></label>
+    </div>
+    <button type="submit" class="submit-btn">Register</button>
+    <div class="form-footer">
+        <span>Already have an account? <a href="#" onclick="login()">Login</a></span>
+    </div>
+</form>
+
+        </div>
+    </div>
+
+    <script>
+  const loginForm = document.getElementById('login');
+const registerForm = document.getElementById('register');
+const btn = document.getElementById('btn');
+
+function login() {
+    loginForm.style.display = 'flex';
+    registerForm.style.display = 'none'; // Hide the register form
+    btn.style.left = "0"; // Move the button indicator
+}
+
+function register() {
+    loginForm.style.display = 'none'; // Hide the login form
+    registerForm.style.display = 'flex'; // Show the register form
+    btn.style.left = "50%"; // Move the button indicator
+}
+
+
+    </script>
+</body>
+
+</html>
