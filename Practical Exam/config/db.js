@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const link = "mongodb+srv://prathamm3786:pratham%402211@prathamm2211.upqlo.mongodb.net/practical-exam";
+const link = "mongodb+srv://vishwaa8420:vishwa08@cluster0.qzx6y.mongodb.net/practical-exam";
 
 const connectDb = async() => {
     try{
