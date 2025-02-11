@@ -3,7 +3,7 @@ const routes = express.Router();
 
 
 
-const { loginPage, registerPage, registerUser, dashboardPage, loginUser, logout, insertData, addBlog, viewBlog, editBlog, updateBlog, deleteUser, readMore, otpPage, newPasswordpage, forgotPassword, verifyOtp, usernewPassword } = require('../controllers/AuthController');
+const { loginPage, registerPage, registerUser, dashboardPage, loginUser, logout, insertData, addBlog, viewBlog, editBlog, updateBlog, deleteUser, readMore, otpPage, newPasswordpage, forgotPassword, verifyOtp, usernewPassword,cartPage } = require('../controllers/AuthController');
 
 const passport = require('passport');
 
@@ -32,6 +32,7 @@ routes.get('/register', registerPage);
 routes.post('/registeruser', registerUser);
 routes.get('/dashboard',passport.checkUser, dashboardPage);
 routes.get('/addblog', addBlog);
+routes.get('/cart', cartPage);
 routes.post('/insertdata', fileupload, insertData);
 routes.get('/viewblog', viewBlog);
 routes.get('/delete', deleteUser)

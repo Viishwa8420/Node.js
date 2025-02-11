@@ -69,6 +69,24 @@ const insertData = async (req, res) => {
         console.error(err);
         return false
     }
+};const cartPage = async (req, res) => {
+    try {
+        // Create a new product document
+        const newProduct = new Blog({
+            title: req.body.title,
+            price: req.body.price,
+            qty: req.body.qty,
+            description: req.body.description,
+            image: req.file ? req.file.path : null, // Handle case when no file is uploaded
+        });
+
+        await newProduct.save(); // Save to the database
+        console.log('Product added');
+        return res.redirect('/cart');
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send('Internal Server Error');
+    }
 };
 
 // View Blogs
@@ -324,6 +342,7 @@ module.exports = {
     registerPage,
     registerUser,
     dashboardPage,
+    cartPage,
     addBlog,
     insertData,
     viewBlog,
