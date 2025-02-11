@@ -3,119 +3,117 @@ const blog = require('../models/blogSchema')
 
 // Render login & register page
 const loginPage = (req, res) => {
-    res.render('login & register'); // Ensure the file name matches exactly
+    res.render('login & register'); 
 };
-const dashboardPage = (req, res) => {
-    // Example: Fetch blogs from your database
-    const blogs = [
-        { image: 'image1.jpg', title: 'Blog 1' },
-        { image: 'image2.jpg', title: 'Blog 2' },
-    ];
+const dashboardPage = async (req, res) => {
+   try {
+    
+    const blogs = await blog.find({});
 
-    res.render('dashboard', { Blog: blogs });
-};
+    res.render('dashboard', { Blog : blogs });
+   } catch (error) {
+       console.log(error);
+       return false
+    
+   }
+};  
 
 const registerUser = (req, res) => {
     const { name, email, password } = req.body;
-    // Add logic to save user data to the database
-    res.redirect('/dashboard'); // Redirect to dashboard after successful registration
+    res.redirect('/dashboard');
 };
 
 const loginUser = (req, res) => {
     const { email, password } = req.body;
-    // Add logic to authenticate user
-    res.redirect('/dashboard'); // Redirect to dashboard after successful login
+    res.redirect('/dashboard'); 
 };
 
 const logoutUser = (req, res) => {
-    // Add logic to handle user logout
     res.redirect('/');
 };
 
 const addBlog = (req, res) => {
-    res.render('addBlog'); // Render the Add Blog page
+    res.render('addBlog'); 
 };
 
 const insertData = async (req, res) => {
     try {
-        const { title, content } = req.body;
-        const image = req.file ? req.file.filename : null;
+        const { title, description, author } = req.body;
+        const newBlog = new blog({
+            title: title,
+            description: description,
+            author: author,
+            image: req.file ? req.file.path : ''
+        });
 
-        const newBlog = new blog({ title, content, image });
         await newBlog.save();
-        res.redirect('/dashboard');
+        console.log("New blog post published successfully");
+        return res.redirect('/dashboard');
     } catch (error) {
-        console.error("Error inserting blog:", error);
-        res.status(500).send("Error adding blog");
-    }
-};const deleteBlog = async (req, res) => {
-    try {
-        const id = req.query?.deleteid;
-
-        if (!id) {
-            return res.status(400).send("Invalid request: No blog ID provided");
-        }
-
-        const deletedBlog = await blog.findByIdAndDelete(id);
-
-        if (!deletedBlog) {
-            return res.status(404).send("Blog not found");
-        }
-
-        res.redirect('/dashboard');
-    } catch (error) {
-        console.error("Error deleting blog:", error);
-        res.status(500).send("Error deleting blog");
+        console.log(error);
+        return false
+        
     }
 };
-
+const deleteBlog = async (req, res) => {
+    try {
+        const id = req.query.deleteid;
+        await blog.findByIdAndDelete(id);
+        res.redirect('/dashboard');
+        
+    } catch (error) {
+        console.log(error);
+        return false
+        
+    }
+};
 
 const UpdateBlog = async (req, res) => {
     try {
-        const { id, title, content } = req.body;
-        const image = req.file ? req.file.filename : null;
-
-        if (!id) {
-            return res.status(400).send("Invalid request: No blog ID provided");
+      const { editid, title, description, author } = req.body;
+  
+      const blogPost = await blog.findById(editid);
+      if (!blogPost) {
+        return res.status(404).send("Blog post not found");
+      }
+  
+      const updateData = { title, description, author };
+      if (req.file) {
+        updateData.image = req.file.path;
+      }
+  
+      await blog.findByIdAndUpdate(editid, updateData);
+  
+      if (req.file) {
+        try {
+          fs.unlinkSync(blogPost.image);
+          console.log("Old blog image deleted successfully");
+        } catch (error) {
+          console.error("Error deleting old blog image:", error);
         }
-
-        const blogToUpdate = await blog.findById(id);
-        if (!blogToUpdate) {
-            return res.status(404).send("Blog not found");
-        }
-
-        blogToUpdate.title = title || blogToUpdate.title;
-        blogToUpdate.content = content || blogToUpdate.content;
-        if (image) blogToUpdate.image = image;
-
-        await blogToUpdate.save();
-        res.redirect('/dashboard');
-    } catch (error) {
-        console.error("Error updating blog:", error);
-        res.status(500).send("Error updating blog");
+      }
+  
+      console.log("Blog updated!");
+      return res.redirect('/dashboard');
+    } catch (err) {
+      console.error("Error updating blog:", err);
+      return res.status(500).send("Failed to update blog");
     }
-};
-
+  };
 const editBlog = async (req, res) => {
     try {
-        const { id } = req.query;
-
-        if (!id) {
-            return res.status(400).send("Invalid request: No blog ID provided");
-        }
-
-        const blogToEdit = await blog.findById(id);
-        if (!blogToEdit) {
-            return res.status(404).send("Blog not found");
-        }
-
-        res.render('editBlog', { blog: blogToEdit });
+      const id = req.query.editid;
+      const blogPost = await blog.findById(id);
+  
+      if (!blogPost) {
+        return res.status(404).send('Blog post not found');
+      }
+      res.render('editblog', { blogPost: blogPost }); 
     } catch (error) {
-        console.error("Error fetching blog for editing:", error);
-        res.status(500).send("Error loading edit page");
+      console.error(error);
+      res.status(500).send('Internal server error');
     }
-};
-
+  };
 const readMore = async (req, res) => {
     try {
         const { id } = req.query;

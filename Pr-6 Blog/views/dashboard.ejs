@@ -11,7 +11,6 @@
 /* @import "https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap";*/
 
 @import "https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"; 
-
 /* Global style settings */
 * {
   margin: 0;
@@ -338,17 +337,20 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   transform: translateY(-2px); /* Slight upward movement */
 }
-.wrap{
+.wrap {
   display: flex;
   flex-wrap: wrap;
-  padding: 0 10px;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center; /* Center cards */
 }
+
 /* Card styling */
 .card {
-  border: 1px solid #ddd;
+  width: 300px;
+  border: none;
   border-radius: 10px;
   overflow: hidden;
-
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   background: #fff;
   position: relative;
@@ -364,11 +366,13 @@
 .card-img {
   position: relative;
   overflow: hidden;
+  height: 180px;
 }
 
 .card-img img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.4s ease;
 }
 
@@ -376,7 +380,7 @@
   transform: scale(1.1);
 }
 
-/* Read More button */
+/* Read More overlay */
 .card-overlay {
   position: absolute;
   top: 0;
@@ -410,32 +414,32 @@
   transform: scale(1.1);
 }
 
-/* Body content styling */
+/* Card content */
 .card-body {
-  position: relative;
   padding: 15px;
-  height: 200px;
   text-align: left;
-  transition: transform 0.4s ease;
 }
 
-/* Author and buttons section */
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-body p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Author and action buttons */
 .author-section {
-  position: absolute;
-  bottom: -80px; /* Initially hidden below the card */
-  left: 0;
-  width: 100%;
-  background: #f4f4f4;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
-  transition: bottom 0.4s ease;
-}
-
-.card:hover .author-section {
-  bottom: 0; /* Slide up on hover */
+  background: #f4f4f4;
+  padding: 10px;
+  border-top: 1px solid #ddd;
 }
 
 .author-section span {
@@ -459,22 +463,46 @@
   transform: scale(1.1);
 }
 
-/* Special styles for Delete button */
-.author-section a.delete-btn {
+/* Delete button */
+.author-section .delete-btn {
   background-color: #f44336;
 }
 
-.author-section a.delete-btn:hover {
+.author-section .delete-btn:hover {
   background-color: #d32f2f;
 }
+/* Edit and Delete Button Styling */
+.edit-btn {
+  background-color: #ffc107;
+  color: #fff;
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 5px 10px;
+  text-decoration: none;
+}
+
+.edit-btn:hover {
+  background-color: #e0a800;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px 10px;
+  text-decoration: none;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .sidebar.open {
-        width: 200px;
-    }
-    .home-section {
-        left: 200px;
-        width: calc(100% - 200px);
-    }
+  .wrap {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 
@@ -527,47 +555,82 @@
   </div>
   <!-- Main content area -->
   <section class="home-section">
-    <div class="text">Dashboard
-      
-    </div>
-    
-
+    <div class="text">Dashboard</div>
+  
     <div class="wrap">
-      
       <% if (Blog && Blog.length > 0) { %>
         <% Blog.map((val) => { %>
-            <div class="card">
-                <div class="card-img">
-                    <img src="<%= val.image %>" alt="" />
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title"><%= val.title %></h5>
-                    <div class="author-section">
-                      <span>by <%= val.author %></span>
-                     
-                    </div> <div>
-                      <a href="/deleteblog?deleteid=<%= val._id %>" class="delete-btn">Delete</a>
-
-                      <a href="/editblog?editid=<%= val.id %>">Edit</a>
-                    </div>
-                </div>
+          <div class="card">
+            <div class="card-img">
+              <img src="<%= val.image %>" alt="" />
             </div>
+            <div class="card-body">
+              <h5 class="card-title"><%= val.title %></h5>
+              <p class="card-text">
+                <%= val.description ? val.description.substring(0, 100) + "..." : "No content available." %>
+              </p>
+              
+  
+              <div class="author-section">
+                <span>by <%= val.author %></span>
+              </div>
+              
+              <div>
+                <button class="btn btn-primary read-more-btn" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#blogModal" 
+                        data-title="<%= val.title %>" 
+                        data-content="<%= val.content %>">
+                  
+                </button>
+                
+                <a href="/editblog?editid=<%= val.id %>" class="btn btn-warning edit-btn">Edit</a>
+                <a href="/deleteblog?deleteid=<%= val.id %>" class="btn btn-danger delete-btn">Delete</a>
+              </div>
+            </div>
+          </div>
         <% }) %>
-    <% } else { %>
-      <p>No blogs available.</p>
-      <a href="/add" class="btn btn-primary">Create New Blog</a>
-      
-    <% } %>
-    
-
+      <% } else { %>
+        <p>No blogs available.</p>
+        <a href="/add" class="btn btn-primary">Create New Blog</a>
+      <% } %>
     </div>
-
   </section>
-
+  
+  <!-- Full-Screen Blog Modal -->
+  <div class="modal fade" id="blogModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="blogModalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p id="blogModalContent"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
     
    
 </body>
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".read-more-btn").forEach((button) => {
+    button.addEventListener("click", function () {
+      let title = this.getAttribute("data-title");
+      let content = this.getAttribute("data-content");
+
+      document.getElementById("blogModalTitle").innerText = title;
+      document.getElementById("blogModalContent").innerText = content;
+    });
+  });
+});
+
+
+</script>
 <script>
     let articles = document.querySelectorAll(".article");
 

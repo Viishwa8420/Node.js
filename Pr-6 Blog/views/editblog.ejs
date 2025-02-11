@@ -608,26 +608,26 @@ textarea.form-control {
                                    
                                     <div class="mb-3">
                                         <label class="form-label">Title:</label>
-                                        <input type="text" class="form-control" value="<%= single.title %>" name="title" required>
+                                        <input type="text" class="form-control" value="<%= blogPost.title %>" name="title" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Description:</label>
-                                        <textarea class="form-control" name="description"  required><%= single.description %></textarea>
+                                        <textarea class="form-control" name="description"  required><%= blogPost.description %></textarea>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Author:</label>
-                                        <input type="text" class="form-control" name="author" value="<%= single.author %>" required>
+                                        <input type="text" class="form-control" name="author" value="<%= blogPost.author %>" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Image:</label>
-                                        <img src="<%= single.image %>" width="100" />
+                                        <img src="<%= blogPost.image %>" width="100" />
                                       
                                         <input type="file" class="form-control" name="image">
                                     </div>
-                                    <input type="hidden" name="editid" value="<%= single.id %>">
+                                    <input type="hidden" name="editid" value="<%= blogPost.id %>">
                                     <button type="submit" class="btn btn-primary">Publish Blog</button>
                                 </form>
 
