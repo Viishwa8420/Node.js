@@ -28,7 +28,11 @@
         .form-control {
             width: 100%; 
         }
-
+        a{
+            text-decoration: none;
+            color: aliceblue;
+            font-weight: 600;
+        }
         h1 {
           color: rgb(84, 6, 6);
             text-align: center;
@@ -55,7 +59,10 @@
                 <label for="price" class="form-label">Price</label>
                 <input type="number" class="form-control" id="price" name="price" required>
             </div>
-            <button type="submit" class="btn btn-success w-100">Add Movie</button>
+           <div class="d-flex">
+            <button type="submit" class="btn btn-success w-50 m-1">Add Movie</button>
+            <button type="button" class="btn btn-warning w-50 m-1"><a href="/">Back To HomePage</a></button>
+           </div>
         </form>
     </div>
 </body>
